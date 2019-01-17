@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
+import App from '../App';
 import styled, {css} from 'styled-components';
 
-class ModeToggler extends Component {
+class Theme extends Component {
+    state = {
+        theme: ''
+    }
+
     render() {
         return (
             <>
                 <div>Toggle</div>
-                {this.props.children}
+                <App theme={this.state.theme}/>
             </>
         )
     }
 }
 
-export default ModeToggler;
+export default Theme;
