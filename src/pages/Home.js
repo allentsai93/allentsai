@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import styled, { css } from 'styled-components';
+import styled, { css, withTheme } from 'styled-components';
 import {Link} from 'react-router-dom';
-import { Parallax, Background } from 'react-parallax';
 
 const PageContainer = styled.div`
     min-width: 100vw;
@@ -11,6 +10,7 @@ const PageContainer = styled.div`
     flex-flow: column wrap;
     justify-content: flex-end;
     transition: min-height 200ms linear;
+    will-change: min-height;
     position: sticky;
     top: -14vh;
     z-index: 2;
@@ -29,6 +29,7 @@ const HeroText = styled.h1`
         ${(props) => !props.scroll ? 
         'opacity: 1' : 'font-size: 3vmin; opacity: 0'}
         transition: opacity 300ms linear;
+        will-change: opacity;
     }
     position: absolute;
     left: 50%;
@@ -37,10 +38,12 @@ const HeroText = styled.h1`
         'font-size: 14vmin;' : 'font-size: 6vmin; transform: translateX(0); left: 0; padding: 0 20px;'}
     
     transition: all 200ms linear;
+    will-change: all;
 `;
 
 const inActivePageContentHover = `
         transition: transform 100ms ease-in;
+        will-change: transform;
         transform: scale(1.1);
 `;
 
@@ -52,9 +55,11 @@ const PageContents = styled.div`
     background: -webkit-linear-gradient(to right, #3F5EFB, #FC466B);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to right, #3F5EFB, #FC466B); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */  
     transition: width 200ms linear, height 200ms linear, transform 100ms ease-in;
+    will-change: width, height, transform;
     & > * {
         ${(props) => props.scroll ? 'opacity: 1;' : 'opacity: 0;'}
         transition: opacity 600ms ease-in;
+        will-change: opacity;
     }
     &:hover {
         ${p => !p.scroll ? css`${inActivePageContentHover}` : ''}
@@ -98,6 +103,7 @@ const ContentWrapper = styled.div`
         opacity: 0.4;
         z-index: 0;
         transition: min-height 200ms ease-in, bottom 0.5s ease-out, opacity 0.3s ease-out;
+        will-change: min-height, bottom, opacity;
         left: 25vw;
         content: "";
         border-radius: 6vmin;
@@ -114,6 +120,7 @@ const ContentWrapper = styled.div`
         opacity: 0.5;
         bottom: -3vh;
         transition: min-height 200ms ease-in, bottom 0.8s ease-out, opacity 0.2s ease-out;
+        will-change: min-height, bottom, opacity;
         z-index: 0;
         left: -25vw;
         content: "";
@@ -130,12 +137,12 @@ const Navigation = styled.div`
 
     & > a {
         text-decoration: none;
-        color: black;
         font-weight: lighter;
         font-size: 4vmin;
         opacity: 1;
         ${p => p.scroll ? 'opacity: 0;' : ''}
         transition: opacity 0.3s ease-out;
+        will-change: opacity;
     }
 `;
 
@@ -147,7 +154,6 @@ const FixedNavigation = styled.div`
 
     & > a {
         text-decoration: none;
-        color: black;
         font-weight: lighter;
         font-size: 6vmin;
     }
@@ -158,20 +164,30 @@ const FixedNavigation = styled.div`
     right: -2vw;
     top: 15vh;
     transition: opacity 0.1s ease-out;
+    will-change: opacity;
     ${p => p.scroll ? 'opacity: 1; transition: opacity 0.7s ease-out;' : ''}
 `;
 
 class Home extends Component {
     state = {
-        scroll: false
+        scroll: false,
+        darkMode: false
     }
 
     componentDidMount = () => {
+        console.log(this.props);
+        this.setState({darkMode: this.props.theme})
         window.addEventListener('scroll', this.getWindowHeight);
      }
    
     componentWillUnmount = () =>{
         window.removeEventListener('scroll', this.getWindowHeight);
+    }
+
+    componentDidUpdate = (prevProps, prevState) => {
+        // if(prevProps.theme !== this.state.darkMode) {
+        //     this.setState({darkMode: this.props.theme})
+        // }
     }
     
     getWindowHeight = () => {
@@ -190,22 +206,23 @@ class Home extends Component {
     }
 
     render() {
+        console.log(this.props);
         return (
             <>
-            <PageContainer scroll={this.state.scroll} >
-                <HeroText scroll={this.state.scroll} >
-                    Dsaddsa Paks
-                    <p>Test Test TEst</p>
+            <PageContainer scroll={this.state.scroll} theme={this.state.theme}>
+                <HeroText scroll={this.state.scroll} theme={this.state.theme}>
+                    Allen Tsai
+                    <p>Full Stack Developer</p>
                 </HeroText>
-                <Navigation scroll={this.state.scroll}>
+                <Navigation scroll={this.state.scroll} theme={this.state.theme}>
+                    <Link to="/exp">Experience</Link>
                     <Link to="/projects">Projects</Link>
                     <Link to="/github">GitHub</Link>
-                    <Link to="/exp">Experience</Link>
                 </Navigation>
-                <FixedNavigation scroll={this.state.scroll}>
+                <FixedNavigation scroll={this.state.scroll} theme={this.state.theme}>
+                    <Link to="/exp">Experience</Link>
                     <Link to="/projects">Projects</Link>
                     <Link to="/github">GitHub</Link>
-                    <Link to="/exp">Experience</Link>
                 </FixedNavigation>
             </PageContainer>
             <ContentWrapper scroll={this.state.scroll}>      
@@ -224,4 +241,4 @@ class Home extends Component {
     }
 };
 
-export default Home;
+export default withTheme(Home);
