@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import styled, { css, withTheme } from 'styled-components';
+import React, { PureComponent } from 'react';
+import styled, { css } from 'styled-components';
 import {Link} from 'react-router-dom';
 
 const PageContainer = styled.div`
     min-width: 100vw;
-    min-height: 90vh;
+    min-height: 60vh;
     display: flex;
     align-items: center; 
     flex-flow: column wrap;
@@ -12,61 +12,92 @@ const PageContainer = styled.div`
     transition: min-height 200ms linear;
     will-change: min-height;
     position: sticky;
-    top: -14vh;
+    top: -20vh;
     z-index: 2;
     ${(props) => props.scroll ? 
     'min-height: 30vh;' : ''}
+    @media (max-width: 600px) {
+        top: -15vh;
+    }
+    margin-bottom: 13vh;
 `;
 
-const HeroText = styled.h1`
-    margin: 0;
-    transform: translateX(-50%) translateY(-50%);
-    & > * {
+const HeroText = styled.div`
+    & > p {
         font-weight: 100;
-        line-height: 15px;
         margin: 0;
         font-size: 7vmin;
         ${(props) => !props.scroll ? 
-        'opacity: 1' : 'font-size: 3vmin; opacity: 0'}
-        transition: opacity 300ms linear;
+        'opacity: 1;' : 'font-size: 3vmin; opacity: 0;  text-align: left; margin-left: 20px; position: absolute; width: auto; left: 0; bottom: -10vmin;'}
+        transition: opacity 300ms ease-in;
         will-change: opacity;
     }
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    ${(props) => !props.scroll ? 
-        'font-size: 14vmin;' : 'font-size: 6vmin; transform: translateX(0); left: 0; padding: 0 20px;'}
-    
-    transition: all 200ms linear;
-    will-change: all;
-`;
-
-const inActivePageContentHover = `
-        transition: transform 100ms ease-in;
+    position: relative;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: center;
+    & > h1 {
+        font-weight: 600;
+        margin: 0;
+        transform: translateX(-50%) translateY(-62%);
+        left: 50%;
+        ${(props) => !props.scroll ? 
+            'font-size: 14vmin;' : 'font-size: 6vmin;  padding: 0 20px; text-align: left; transform: translateX(0); left: 0; padding: 0 20px; transition: transform 200ms ease-out;'}
+        top: 36%;
         will-change: transform;
-        transform: scale(1.1);
+    }
+
+    & > * {
+        text-align: center;
+        width: 100vw;
+        position: absolute;
+        ${(props) => props.scroll ? 
+            '' : ''}
+    }
+    width: 100%;
+    ${p => !p.scroll ? 'height: 60vh;' : ''};
+
+    @media (max-width: 1024px) {
+        & > h1 {
+            transform: translateX(-50%) translateY(-59%);
+            top: 40%; 
+            ${(props) => props.scroll ? 
+                'transform: translateX(0); transition: transform 200ms ease-out;' : ''}          
+        }
+    }
 `;
 
 const PageContents = styled.div`
-    ${(props) => props.scroll ? 
-    'width: 90vw; height: 90vw;' : 'width: 30vw; height: 30vw;'}
-    border-radius: 6vmin;
+    ${(props) => props.scroll && !props.child ? 
+    'transform: scale(1);' : !props.child ? 'transform: scale(0.5); bottom: 31vh; transition: transform 100ms ease-out; height: calc(85vh + 10vh);' : ''}
+    width: 90vw; 
+    height: 85vh;
+    border-radius: 7vmin;
     background: #FC466B;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to right, #3F5EFB, #FC466B);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to right, #3F5EFB, #FC466B); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */  
-    transition: width 200ms linear, height 200ms linear, transform 100ms ease-in;
-    will-change: width, height, transform;
+    transition: transform 100ms ease-in;
+    will-change: transform;
     & > * {
-        ${(props) => props.scroll ? 'opacity: 1;' : 'opacity: 0;'}
-        transition: opacity 600ms ease-in;
+        ${(props) => props.scroll ? 'opacity: 1' : 'opacity: 0'}
+        transition: opacity 500ms ease-in;
         will-change: opacity;
     }
     &:hover {
-        ${p => !p.scroll ? css`${inActivePageContentHover}` : ''}
+        ${p => !p.scroll ? 'transform: scale(0.6);' : ''}
     }
     position: relative;
     z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     ${p => p.child ? css`${SiblingPageContent}` : ''}
+    order: 2;
+    @media (max-width: 1024px) {
+        ${(props) => props.scroll && !props.child ? 
+            'order: 2;' : ""}
+    }
 `;
 
 const ActiveContentWrapperAfter = `
@@ -75,6 +106,7 @@ const ActiveContentWrapperAfter = `
     opacity: 0;
     z-index: 0;
     left: 63vw;
+    display: none;
 `;
 
 const ActiveContentWrapperBefore = `
@@ -83,14 +115,19 @@ const ActiveContentWrapperBefore = `
     opacity: 0;
     z-index: 0;
     left: -3vw;
+    display: none;
 `;
 
 const SiblingPageContent = `
     margin: 30px 0;
+    width: 90vw; 
+    height: 85vh;
+    border-radius: 7vmin;
 `;
 
 const ContentWrapper = styled.div`
     position: relative;
+    margin-bottom: 60px;
 
     &:after {
         min-width: 30vw;
@@ -98,15 +135,15 @@ const ContentWrapper = styled.div`
         background: -webkit-linear-gradient(to right, #99f2c8, #1f4037);  /* Chrome 10-25, Safari 5.1-6 */
         background: linear-gradient(to right, #99f2c8, #1f4037); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */        
         position: absolute;
-        min-height: 30vw;
-        bottom: -1vh;
+        min-height: 60vw;
+        top: 2vh;
         opacity: 0.4;
         z-index: 0;
         transition: min-height 200ms ease-in, bottom 0.5s ease-out, opacity 0.3s ease-out;
         will-change: min-height, bottom, opacity;
-        left: 25vw;
+        right: 0;
         content: "";
-        border-radius: 6vmin;
+        border-radius: 2vmin;
         ${p => p.scroll ? css`${ActiveContentWrapperAfter}` : ''}
     }
 
@@ -116,16 +153,26 @@ const ContentWrapper = styled.div`
         background: -webkit-linear-gradient(to right, #3F5EFB, #FC466B);  /* Chrome 10-25, Safari 5.1-6 */
         background: linear-gradient(to right, #3F5EFB, #FC466B); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */        
         position: absolute;
-        min-height: 30vw;
+        min-height: 60vw;
         opacity: 0.5;
-        bottom: -3vh;
+        top: 3vh;
         transition: min-height 200ms ease-in, bottom 0.8s ease-out, opacity 0.2s ease-out;
         will-change: min-height, bottom, opacity;
         z-index: 0;
-        left: -25vw;
+        left: 0;
         content: "";
-        border-radius: 6vmin;
+        border-radius: 2vmin;
         ${p => p.scroll ? css`${ActiveContentWrapperBefore}` : ''}
+    }
+    
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    height: auto;
+    justify-content: center;
+
+    & > section {
+        ${p => p.scroll ? 'display: flex;' : 'display: none;'}
     }
 `;
 
@@ -141,8 +188,10 @@ const Navigation = styled.div`
         font-size: 4vmin;
         opacity: 1;
         ${p => p.scroll ? 'opacity: 0;' : ''}
-        transition: opacity 0.3s ease-out;
-        will-change: opacity;
+    }
+
+    @media (max-width: 1024px) {
+        display: none;
     }
 `;
 
@@ -162,37 +211,32 @@ const FixedNavigation = styled.div`
     position: absolute;
     width: 50vw;
     right: -2vw;
-    top: 15vh;
+    top: 24vh;
     transition: opacity 0.1s ease-out;
     will-change: opacity;
-    ${p => p.scroll ? 'opacity: 1; transition: opacity 0.7s ease-out;' : ''}
+    ${p => p.scroll ? 'opacity: 1; transition: opacity 1s ease-in;' : ''}
+
+    @media (max-width: 1024px) {
+        display: none;
+    }
 `;
 
-class Home extends Component {
+class Home extends PureComponent {
     state = {
-        scroll: false,
-        darkMode: false
+        scroll: false
     }
 
     componentDidMount = () => {
-        console.log(this.props);
-        this.setState({darkMode: this.props.theme})
         window.addEventListener('scroll', this.getWindowHeight);
      }
    
     componentWillUnmount = () =>{
         window.removeEventListener('scroll', this.getWindowHeight);
     }
-
-    componentDidUpdate = (prevProps, prevState) => {
-        // if(prevProps.theme !== this.state.darkMode) {
-        //     this.setState({darkMode: this.props.theme})
-        // }
-    }
     
     getWindowHeight = () => {
         const distanceY = window.pageYOffset || document.documentElement.scrollTop
-        const shrinkOn = 10;
+        const shrinkOn = 100;
 
         if (distanceY >= shrinkOn) {
           this.setState({
@@ -206,39 +250,98 @@ class Home extends Component {
     }
 
     render() {
-        console.log(this.props);
         return (
             <>
-            <PageContainer scroll={this.state.scroll} theme={this.state.theme}>
-                <HeroText scroll={this.state.scroll} theme={this.state.theme}>
-                    Allen Tsai
+            <PageContainer scroll={this.state.scroll}>
+                <HeroText scroll={this.state.scroll}>
+                    <h1>Allen Tsai</h1>
                     <p>Full Stack Developer</p>
                 </HeroText>
-                <Navigation scroll={this.state.scroll} theme={this.state.theme}>
+                <Navigation scroll={this.state.scroll}>
                     <Link to="/exp">Experience</Link>
                     <Link to="/projects">Projects</Link>
                     <Link to="/github">GitHub</Link>
                 </Navigation>
-                <FixedNavigation scroll={this.state.scroll} theme={this.state.theme}>
+                <FixedNavigation scroll={this.state.scroll}>
                     <Link to="/exp">Experience</Link>
                     <Link to="/projects">Projects</Link>
                     <Link to="/github">GitHub</Link>
                 </FixedNavigation>
             </PageContainer>
-            <ContentWrapper scroll={this.state.scroll}>      
+            <ContentWrapper scroll={this.state.scroll}>
+    
             <PageContents scroll={this.state.scroll} >
-                <p>Contents</p>
+                <InnerContent className={"colorChange"}><p>Contents</p></InnerContent>
             </PageContents>
+            <SideMenu>
+                <Container>
+                    <Item>Project 1</Item>
+                    <Item>Project 2</Item>
+                    <Item>Project 3</Item>
+                </Container>
+            </SideMenu>  
             </ContentWrapper>
             <PageContents scroll child>
-                <p>Contents</p>
+            <InnerContent><p>Contents</p></InnerContent>
             </PageContents>
             <PageContents scroll child>
-                <p>Contents</p>
+            <InnerContent><p>Contents</p></InnerContent>
             </PageContents>   
             </>
         );
     }
 };
 
-export default withTheme(Home);
+const SideMenu = styled.section`
+    height: auto;
+    @media (max-width: 1024px) {
+        width: 100%;
+    }
+`;
+
+const Container = styled.div`
+    padding: 0 10px;
+    @media (max-width: 1024px) {
+        display: flex;
+        justify-content: space-around;
+        flex: 100%;
+        align-items: center;
+    }
+`;
+
+const Item = styled.span`
+    display: block;
+    cursor: pointer;
+    border: 3px solid #405df9;
+    box-shadow: inset 0px 0px 0px 2px #fbfbfb;
+    box-sizing: border-box;
+    background: #659999;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #f4791f, #659999);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #f4791f, #659999); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    width: 10vh;
+    height: 10vh;
+    margin-bottom: 10px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.7;
+
+    &:hover {
+        opacity: 1;
+    }
+`;
+
+const InnerContent = styled.div`
+    width: 85vw;
+    height: 100%;
+    border-radius: 4vmin;
+    display: flex;
+
+    @media (max-width: 1024px) {
+    width: 100%;
+    height: 80vh;  
+    }
+`;
+
+export default Home;
