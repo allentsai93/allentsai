@@ -40,6 +40,10 @@ const GlobalContainer = styled.div`
   will-change: background-color, color;
   width: 100%;
   position: relative;
+
+  & .fixedNav {
+    background-color: ${p => p.theme.bg};
+  }
 `;
 
 const App = (props) =>  {
