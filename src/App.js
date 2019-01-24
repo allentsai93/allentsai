@@ -13,11 +13,13 @@ import Home from './pages/Home';
 const theme = {
   dark: {
     bg: 'white',
-    fc: 'black'
+    fc: 'black',
+    cbg: '#f7f7f7'
   },
   light: {
     bg: 'black',
-    fc: 'white'
+    fc: 'white',
+    cbg: 'black',
   }
 }
 
@@ -33,17 +35,13 @@ const GlobalContainer = styled.div`
   }
 
   & .colorChange {
-    background-color: ${p => p.theme.bg};
+    background-color: ${p => p.theme.cbg};
   }
 
   transition: background-color 300ms ease-in, color 300ms ease-in;
   will-change: background-color, color;
   width: 100%;
   position: relative;
-
-  & .fixedNav {
-    background-color: ${p => p.theme.bg};
-  }
 `;
 
 const App = (props) =>  {

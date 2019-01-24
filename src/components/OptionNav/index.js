@@ -37,6 +37,7 @@ const MobileMenu = styled.div`
         bottom: 1vh;
         height: 8vh;
         display: flex;
+        display: none;
         flex-flow: row wrap;
         align-items: center;
         justify-content: space-evenly;
