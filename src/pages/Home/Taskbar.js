@@ -14,10 +14,6 @@ const StyledTaskbar = styled.div`
     align-items: center;
 
     @media (max-width: 700px) {
-        background: black;
-        width: 24vmax;
-        border-bottom-left-radius: 3vmin;
-        border-bottom-right-radius: 3vmin;
         & * {
             display: none;
         }

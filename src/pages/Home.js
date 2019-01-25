@@ -10,62 +10,64 @@ import send from './Home/send.svg';
 
 const PageContainer = styled.div`
     min-width: 100vw;
-    height: auto;
+    position: sticky;
+    top: 0;
     align-items: center; 
     flex-flow: column wrap;
     justify-content: center;
-    transition: opacity 200ms linear;
-    -webkit-transition: opacity 200ms linear;
-    will-change: opacity;
-    -webkit-backface-visibility: hidden;
-    z-index: 2;
+    margin: 30vh 0 0;
+    padding: 2vh 0;
 
-    ${p => p.scroll ? 'opacity: 0.1;' : 'opacity: 1;'}
+    & .heroText > p {
+        ${p => p.scroll ? 'opacity: 0;' : 'opacity: 1;'}
+    }
+
+    & .heroText {
+        
+        ${p => p.scroll ? 'width: 50vw;' : 'width: 100vw;'}
+        height: auto;
+        transition: width 100ms ease-in;
+        -webkit-transition: width 100ms ease-in;
+        will-change: width;
+    }
 `;
 
 const HeroText = styled.div`
     & > p {
         font-weight: 100;
         margin: 0;
-        font-size: 7vmin;
-        transition: opacity 300ms ease-in;
-        -webkit-transition: opacity 300ms ease-in;
+        font-size: 35px;
+        transition: opacity 100ms ease-in;
+        -webkit-transition: opacity 100ms ease-in;
         will-change: opacity;
     }
     position: relative;
     display: flex;
     flex-flow: column wrap;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     & > h1 {
         font-weight: 600;
         margin: 0;
-        font-size: 14vmin;
+        font-size: 7vw;
         line-height: 12vmin;
     }
-    width: 100%;
-    height: 60vh;
-
 `;
 
 
 const PageContents = styled.div`
     ${(props) => props.scroll && !props.child ? 
-    'transform: scale(1); -webkit-transform: scale(1);' : !props.child ? 'transform: scale(0.7); -webkit-transform: scale(0.7); bottom: -5vh; transition: transform 100ms ease-out; -webkit-transition: -webkit-transform 100ms ease-out; height: calc(85vh + 10vh);' : ''}
-    width: 90vw; 
-    transform-origin: top;
-    -webkit-transform-origin: top;
-    height: 85vh;
+    'width: 100vw; box-shadow: 0px 0px 22px 3px rgba(0,0,0,0.28);' : !props.child ? 'width: 0; transition: width 200ms ease-out; -webkit-transition: width 200ms ease-out; height: auto;' : 'box-shadow: 0px 0px 22px 3px rgba(0,0,0,0.28);'}
+    height: auto;
     border-radius: 3vmin;
-    box-shadow: 0px 0px 22px 3px rgba(0,0,0,0.28);
     -webkit-perspective: 1000;
-    transition: transform 100ms ease-in;
-    -webkit-transition: -webkit-transform 100ms ease-in;
+    transition: width 200ms ease-out;
+    -webkit-transition: width 200ms ease-out;
     will-change: transform;
-    & > :nth-child(n+3) {
-        ${(props) => props.scroll ? 'opacity: 1' : 'opacity: 0.1'}
-        transition: opacity 500ms ease-in;
-        -webkit-transition: opacity 500ms ease-in;
+    & > * {
+        ${(props) => props.scroll ? 'opacity: 1;' : 'opacity: 0;'}
+        transition: opacity 200ms ease-in;
+        -webkit-transition: opacity 200ms ease-in;
         will-change: opacity;
         -webkit-backface-visibility: hidden;
     }
@@ -79,21 +81,16 @@ const PageContents = styled.div`
     @media (max-width: 1024px) {
         ${(props) => props.scroll && !props.child ? 
             'order: 2;' : ""}
-        
-        ${(props) => !props.scroll ? 
-            'transform: scale(0.8); -webkit-transform: scale(0.8);' : ""}
     }
 
     @media (max-width: 700px) {
-        border-radius: 7vmin;
-        border: 2vmin solid black;
+        ${(props) => props.scroll ? 'border: none;' : ''}
     }
     -webkit-backface-visibility: hidden;
-    overflow: hidden;
 `;
 
 const SiblingPageContent = `
-    margin: 30px 0;
+    margin: 17% 0;
     width: 90vw; 
     height: 85vh;
 `;
@@ -211,25 +208,24 @@ class Home extends PureComponent {
         return (
             <>
             <PageContainer scroll={this.state.scroll}>
-                <HeroText>
+                <HeroText className={'heroText'}>
                     <h1>Test Test</h1>
                     <p>Lorem Ipsum Test</p>
                     <CodeToggle onClick={this.codeToggle}>&#60;/&#62;</CodeToggle>
                 </HeroText>
-
             </PageContainer>
             <CodeContainer show={this.state.showCode}></CodeContainer>
             <ContentContainer scroll={this.state.scroll}> 
             <PageContents scroll={this.state.scroll} >
-                <Taskbar>
+                {/* <Taskbar>
                     <p>Projects</p>
-                </Taskbar>
+                </Taskbar> */}
                 <LoadingElement load={this.state.scroll}><p>Projects</p></LoadingElement>
                 <InnerContent className={"colorChange"}>
-                    <SideMenu scroll={this.state.scroll}>
-                        <SideMenuTopBar>
+                    <SideMenuTopBar className={"colorChange"}>
                             <p>Projects</p>
-                        </SideMenuTopBar>
+                    </SideMenuTopBar>
+                    <SideMenu scroll={this.state.scroll}>
                         <Container>
                             <CircleItem>
                                 <Item />
@@ -276,6 +272,35 @@ class Home extends PureComponent {
                         <p><strong>stackusedforthis</strong> mongodB, node, express! ❤️❤️❤️</p>
                         </GramText>
                         </GramContent>
+                        <GramContent>
+                        <GramImage>
+                            <GramOptions>
+                            <GramCircle>
+                                <Item />
+                                <span className={"gramTitle"}>
+                                <p>project_title</p>
+                                </span>
+                        </GramCircle>
+                            </GramOptions>
+                            <GramOptions bottom>
+                                <div className={'options'}>
+                                <img src={heart} alt={'like'}/>
+                                <img src={bubble} alt={'chat'}/>
+                                <img src={send} alt={'send'}/>
+                                </div>
+                                <div>
+                                <img src={marker} alt={'marker'}/>
+                                </div>
+                            </GramOptions>
+                        </GramImage>
+                        <GramText>
+                        <p><strong>project_name1</strong> Highlights</p>
+                        <span>Load site in a new tab</span>
+                        <p><strong>url</strong> https://nameless-reef-38457.herokuapp.com</p>
+                        <p><strong>_github</strong> 🔥 https://github.com/allentsai93/Highlights-Fullstack 🔥</p>
+                        <p><strong>stackusedforthis</strong> mongodB, node, express! ❤️❤️❤️</p>
+                        </GramText>
+                        </GramContent>
                     </ContentSection>  
                     
                 </InnerContent>
@@ -287,14 +312,14 @@ class Home extends PureComponent {
             <InnerContent><p>Contents</p></InnerContent>
             </PageContents> 
             </ContentContainer>
-            <FixedNavigation scroll={this.state.scroll} className={"fixedNav"}>
+            {/* <FixedNavigation scroll={this.state.scroll} className={"fixedNav"}>
                     <h1 className={"navHeader"}>Test Test</h1>
                     <div className={"iconContainer"}>
                     <Link to="/projects"><NavigationIconLink backgroundImg={"linear-gradient(to right, #fc466b, #3f5efb);"}>P</NavigationIconLink>Projects</Link>
                     <Link to="/exp"><NavigationIconLink backgroundImg={"linear-gradient(to right, #11998e, #38ef7d);"}>Exp</NavigationIconLink>Experience</Link>
                     <Link to="/github"><NavigationIconLink backgroundImg={"linear-gradient(to right, #0f2027, #203a43, #2c5364);"}>GH</NavigationIconLink>GitHub</Link>
                     </div>
-            </FixedNavigation>  
+            </FixedNavigation>   */}
             </>
         );
     }
@@ -314,9 +339,8 @@ const GramOptions= styled.div`
     & {
         color: white;
     }
-
-    & .options {
-
+    @media (max-width: 700px) {
+        border-top: 0.2vmin solid lightgrey;
     }
 `;
 
@@ -327,12 +351,12 @@ const GramImage = styled.div`
     background-repeat: no-repeat;
     background-position-x: 44%;
     position: relative;
-    border: 1px solid #dcd6d6;
     @media (max-width: 700px) {
         background-color: white;
         border-left: none;
         border-right: none;
     }
+    min-height: 500px;
 `;
 
 const GramText = styled.div`
@@ -357,6 +381,7 @@ const GramText = styled.div`
 
 const GramContent = styled.div`
     width: 100%;
+    min-height: 500px;
     display: flex;
     flex-flow: row wrap;
     & > div {
@@ -364,21 +389,22 @@ const GramContent = styled.div`
     }
     overflow: hidden;
     border-radius: 1vmin;
-
+    margin-bottom: 3vmin;
     @media (max-width: 700px) {
         flex-flow: column wrap;
+        margin-bottom: 0;
     }
     
 `;
 
 const ContentSection = styled.section`
-    height: 63vh;
+    height: auto;
     width: 100%;
     padding: 3vmin;
-    padding-top: 0;
     overflow: auto;
     display: flex;
     justify-content: center;
+    flex-flow: column wrap;
     @media (max-width: 700px) {
         padding: 0;
     }
@@ -388,10 +414,16 @@ const SideMenuTopBar = styled.div`
     & > p {
         margin: 5px;
         font-family: 'Grand Hotel', cursive;
-        font-size: 4vh;
+        font-size: 26px;
     }
     width: 100%;
     text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    border-bottom: 0.2vmin solid lightgrey;
+    border-top-left-radius: 3vmin;
+    border-top-right-radius: 3vmin;
 `;
 
 const CircleItem = styled.div`
@@ -401,7 +433,7 @@ const CircleItem = styled.div`
     align-items: center;
     & > p {
         margin: 0;
-        font-size: 1.5vh;
+        font-size: 0.7em;
         text-transform: lowercase;
         margin-top: 3px;
     }
@@ -428,25 +460,7 @@ const LoadingElement = styled.div`
     & > p {
         display: none;
     }
-    @media (max-width: 700px) {
-        background: #aa4b6b;  /* fallback for old browsers */
-        background: -webkit-linear-gradient(to right, #3b8d99, #6b6b83, #aa4b6b);  /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(to right, #3b8d99, #6b6b83, #aa4b6b); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-        top: 0;
-        height: 100%;
-        z-index: 1;
-        min-width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;  
-        & > p {
-            display: block;
-            font-family: 'Grand Hotel', cursive;
-            font-size: 8vmax;
-            color: white;
-        }
-        ${p => p.load ? 'z-index: -1;' : 'transition-delay: 1s; -webkit-transition-delay: 1s;' }
-    }
+
     
     
 `;
@@ -475,7 +489,7 @@ margin-top: 6vmin;
 `;
 
 const CodeContainer = styled.section`
-    ${p => p.show ? 'min-height: 70vh; opacity: 1;' : 'min-height: 0; opacity: 0.1;'};
+    ${p => p.show ? 'min-height: 70vmin; opacity: 1;' : 'min-height: 0; opacity: 0;'};
     transition: opacity 400ms ease-in, min-height 300ms linear;
     -webkit-transition: opacity 400ms ease-in, min-height 300ms linear;
     will-change: opacity, min-height;
@@ -501,14 +515,11 @@ const SideMenu = styled.section`
     justify-content: center;
     display: flex;
     background-color: #f7f7f7;
-    @media (max-width: 700px) {
-        padding-top: 3vmax;
-    }
     transition: opacity 300ms linear;
     -webkit-transition: opacity 300ms linear;
     -webkit-backface-visibility: hidden;
     will-change: opacity;
-    ${p => p.scroll ? 'opacity: 1;' : 'opacity: 0.1;'}
+    ${p => p.scroll ? 'opacity: 1;' : 'opacity: 0;'}
 `;
 
 const Container = styled.div`
@@ -522,7 +533,6 @@ const Container = styled.div`
     justify-content: space-around;
     width: 100%;
     border-bottom: 0.2vmin solid lightgrey;
-    border-top: 0.2vmin solid lightgrey;
     align-items: center;
     background-color: #ffffffeb;
     @media (max-width: 700px) {
@@ -539,8 +549,8 @@ const Item = styled.span`
     background: #659999;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to right, #f4791f, #659999);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to right, #f4791f, #659999); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    width: 6vh;
-    height: 6vh;
+    width: 60px;
+    height: 60px;
     border-radius: 100%;
     display: flex;
     justify-content: center;
@@ -554,14 +564,13 @@ const Item = styled.span`
 
 const InnerContent = styled.div`
     width: 100%;
-    height: 100%;
     border-radius: 4vmin;
+    height: auto;
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-start;
     align-items: flex-start;
     position: relative;
-    top: 2vmax;
     @media (max-width: 700px) {
         top: 0;
     }
@@ -585,9 +594,9 @@ const GramCircle = styled(CircleItem)`
     }
 
     & ${Item} {
-        width: 4vh;
-        height: 4vh;
-        border-width: 1px;
+        width: 35px;
+        height: 35px;
+        border-width: 2px;
     }
 
 `;
