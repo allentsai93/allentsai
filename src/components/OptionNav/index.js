@@ -70,10 +70,14 @@ const ToggleContainer = styled.div`
         opacity: 0.3;
         z-index: 10;
         transition: opacity 200ms ease-out;
+        -webkit-transition: opacity 200ms ease-out;
+        -webkit-backface-visibility: hidden;
         will-change: opacity;
         &:hover {
             opacity: 1;
             transition: opacity 200ms ease-in;
+            -webkit-transition: opacity 200ms ease-in;
+            -webkit-backface-visibility: hidden;
             will-change: opacity;
         }
         bottom: 0;

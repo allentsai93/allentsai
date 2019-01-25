@@ -17,6 +17,7 @@ const PageContainer = styled.div`
     transition: opacity 200ms linear;
     -webkit-transition: opacity 200ms linear;
     will-change: opacity;
+    -webkit-backface-visibility: hidden;
     z-index: 2;
 
     ${p => p.scroll ? 'opacity: 0;' : 'opacity: 1;'}
@@ -50,20 +51,23 @@ const HeroText = styled.div`
 
 const PageContents = styled.div`
     ${(props) => props.scroll && !props.child ? 
-    'transform: scale(1);' : !props.child ? 'transform: scale(0.7); bottom: -5vh; transition: transform 100ms ease-out; -webkit-transition: transform 100ms ease-out; height: calc(85vh + 10vh);' : ''}
+    'transform: scale(1); -webkit-transform: scale(1);' : !props.child ? 'transform: scale(0.7); -webkit-transform: scale(0.7); bottom: -5vh; transition: transform 100ms ease-out; -webkit-transition: -webkit-transform 100ms ease-out; height: calc(85vh + 10vh);' : ''}
     width: 90vw; 
     transform-origin: top;
+    -webkit-transform-origin: top;
     height: 85vh;
     border-radius: 3vmin;
     box-shadow: 0px 0px 22px 3px rgba(0,0,0,0.28);
+    -webkit-perspective: 1000;
     transition: transform 100ms ease-in;
-    -webkit-transition: transform 100ms ease-in;
+    -webkit-transition: -webkit-transform 100ms ease-in;
     will-change: transform;
     & > :nth-child(n+3) {
         ${(props) => props.scroll ? 'opacity: 1' : 'opacity: 0'}
         transition: opacity 500ms ease-in;
         -webkit-transition: opacity 500ms ease-in;
         will-change: opacity;
+        -webkit-backface-visibility: hidden;
     }
     position: relative;
     z-index: 1;
@@ -77,14 +81,14 @@ const PageContents = styled.div`
             'order: 2;' : ""}
         
         ${(props) => !props.scroll ? 
-            'transform: scale(0.8);' : ""}
+            'transform: scale(0.8); -webkit-transform: scale(0.8);' : ""}
     }
 
     @media (max-width: 700px) {
         border-radius: 7vmin;
         border: 2vmin solid black;
     }
-
+    -webkit-backface-visibility: hidden;
     overflow: hidden;
 `;
 
@@ -120,8 +124,11 @@ const FixedNavigation = styled.div`
         margin: 0 5px;
         &:hover {
             transform: scale(1.1);
+            -webkit-transform: scale(1.1);
             transition: transform 50ms ease-in;
-            -webkit-transition: transform 50ms ease-in;
+            -webkit-transition: -webkit-transform 50ms ease-in;
+            will-change: transform;
+            -webkit-backface-visibility: hidden;
         }
         ${p => p.scroll ? 'font-size: 13px;' : ''}
     }
@@ -141,6 +148,8 @@ const FixedNavigation = styled.div`
         opacity: 1;
         transition: opacity 200ms linear;
         -webkit-transition: opacity 200ms linear;
+        will-change: opacity;
+        -webkit-backface-visibility: hidden;
         ${p => p.scroll ? 'flex-basis: auto;' : 'transition: opacity 50ms linear; -webkit-transition: opacity 50ms linear; flex-basis: 0; opacity: 0; flex-grow: 0; width: 0; height: 0;'}
     }
     ${p => p.scroll ? 'flex-flow: column wrap;' : ''};
@@ -156,9 +165,11 @@ const FixedNavigation = styled.div`
         border-radius: 29px;
         ${p => p.scroll ? 'transform: scale(1); -webkit-transform: scale(1);' : 'transform: scale(1.2); -webkit-transform: scale(1.2);'};
         transition: transform 200ms ease-out;
-        -webkit-transition: transform 200ms ease-out;
+        -webkit-transition: -webkit-transform 200ms ease-out;
         will-change: transform;
+        -webkit-backface-visibility: hidden;
     }
+    -webkit-backface-visibility: hidden;
     text-align: center;
 `;
 
@@ -411,8 +422,9 @@ const LoadingElement = styled.div`
     opacity: 1;
     transition: min-width 400ms ease-in, opacity 200ms ease-out 500ms;
     -webkit-transition: min-width 400ms ease-in, opacity 200ms ease-out 500ms;
+    -webkit-backface-visibility: hidden;
     will-change: min-width, opacity;
-    ${p => p.load ? 'min-width: 100%; opacity: 0;' : 'transition: none;' }
+    ${p => p.load ? 'min-width: 100%; opacity: 0;' : 'transition: none; -webkit-transition: none;' }
     & > p {
         display: none;
     }
@@ -433,7 +445,7 @@ const LoadingElement = styled.div`
             font-size: 8vmax;
             color: white;
         }
-        ${p => p.load ? 'z-index: -1;' : 'transition-delay: 1s;' }
+        ${p => p.load ? 'z-index: -1;' : 'transition-delay: 1s; -webkit-transition-delay: 1s;' }
     }
     
     
@@ -467,6 +479,7 @@ const CodeContainer = styled.section`
     transition: opacity 400ms ease-in, min-height 300ms linear;
     -webkit-transition: opacity 400ms ease-in, min-height 300ms linear;
     will-change: opacity, min-height;
+    -webkit-backface-visibility: hidden;
     width: 105%;
     box-shadow: inset 0px 6px 41px 4px rgba(0,0,0,0.46);
     background-color: #ebebeb;
@@ -493,6 +506,8 @@ const SideMenu = styled.section`
     }
     transition: opacity 300ms linear;
     -webkit-transition: opacity 300ms linear;
+    -webkit-backface-visibility: hidden;
+    will-change: opacity;
     ${p => p.scroll ? 'opacity: 1;' : 'opacity: 0;'}
 `;
 
