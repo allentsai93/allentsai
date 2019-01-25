@@ -20,7 +20,7 @@ const PageContainer = styled.div`
     -webkit-backface-visibility: hidden;
     z-index: 2;
 
-    ${p => p.scroll ? 'opacity: 0;' : 'opacity: 1;'}
+    ${p => p.scroll ? 'opacity: 0.1;' : 'opacity: 1;'}
 `;
 
 const HeroText = styled.div`
@@ -63,7 +63,7 @@ const PageContents = styled.div`
     -webkit-transition: -webkit-transform 100ms ease-in;
     will-change: transform;
     & > :nth-child(n+3) {
-        ${(props) => props.scroll ? 'opacity: 1' : 'opacity: 0'}
+        ${(props) => props.scroll ? 'opacity: 1' : 'opacity: 0.1'}
         transition: opacity 500ms ease-in;
         -webkit-transition: opacity 500ms ease-in;
         will-change: opacity;
@@ -150,7 +150,7 @@ const FixedNavigation = styled.div`
         -webkit-transition: opacity 200ms linear;
         will-change: opacity;
         -webkit-backface-visibility: hidden;
-        ${p => p.scroll ? 'flex-basis: auto;' : 'transition: opacity 50ms linear; -webkit-transition: opacity 50ms linear; flex-basis: 0; opacity: 0; flex-grow: 0; width: 0; height: 0;'}
+        ${p => p.scroll ? 'flex-basis: auto;' : 'transition: opacity 50ms linear; -webkit-transition: opacity 50ms linear; flex-basis: 0; opacity: 0.1; flex-grow: 0; width: 0; height: 0;'}
     }
     ${p => p.scroll ? 'flex-flow: column wrap;' : ''};
     & * {
@@ -424,7 +424,7 @@ const LoadingElement = styled.div`
     -webkit-transition: min-width 400ms ease-in, opacity 200ms ease-out 500ms;
     -webkit-backface-visibility: hidden;
     will-change: min-width, opacity;
-    ${p => p.load ? 'min-width: 100%; opacity: 0;' : 'transition: none; -webkit-transition: none;' }
+    ${p => p.load ? 'min-width: 100%; opacity: 0.1;' : 'transition: none; -webkit-transition: none;' }
     & > p {
         display: none;
     }
@@ -475,7 +475,7 @@ margin-top: 6vmin;
 `;
 
 const CodeContainer = styled.section`
-    ${p => p.show ? 'min-height: 70vh; opacity: 1;' : 'min-height: 0; opacity: 0;'};
+    ${p => p.show ? 'min-height: 70vh; opacity: 1;' : 'min-height: 0; opacity: 0.1;'};
     transition: opacity 400ms ease-in, min-height 300ms linear;
     -webkit-transition: opacity 400ms ease-in, min-height 300ms linear;
     will-change: opacity, min-height;
@@ -508,7 +508,7 @@ const SideMenu = styled.section`
     -webkit-transition: opacity 300ms linear;
     -webkit-backface-visibility: hidden;
     will-change: opacity;
-    ${p => p.scroll ? 'opacity: 1;' : 'opacity: 0;'}
+    ${p => p.scroll ? 'opacity: 1;' : 'opacity: 0.1;'}
 `;
 
 const Container = styled.div`
